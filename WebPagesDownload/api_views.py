@@ -7,7 +7,7 @@ from WebPagesDownload.tasks import download_text, download_images
 from django.http import Http404
 from django_celery_results.models import TaskResult
 logger = logging.getLogger(__name__)
-
+from django.db import transaction
 
 class DownloadViewSet(viewsets.ModelViewSet):
     queryset = models.Download.objects.all()
@@ -25,9 +25,10 @@ class DownloadViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         url = request.data['url']
-
-        text_task_id = download_text.delay(url)
-        image_task_id = download_images.delay(url)
+        with transaction.atomic():
+            download = self.perform_create(serializer)
+        text_task_id = download_text.delay(url, download)
+        image_task_id = download_images.delay(url, download)
 
         # print(type(text_task_id))
         #
@@ -43,7 +44,6 @@ class DownloadViewSet(viewsets.ModelViewSet):
             }
         }
 
-        self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(response, status=status.HTTP_202_ACCEPTED, headers=headers)
 

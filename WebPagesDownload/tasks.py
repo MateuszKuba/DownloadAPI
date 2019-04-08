@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 import urllib
 from urllib.parse import urlparse
-from .models import WebImage
+from .models import WebImage, Download, WebText
 
 url = 'https://www.onet.pl'
 
@@ -18,23 +18,22 @@ def images_urls(url):
     return img
 
 @shared_task
-def download_images(url):
+def download_images(url, download):
     urls = images_urls(url)
     res = None
     for image in urls:
         if image[0]+image[1] == "//":
             res = urllib.request.urlretrieve('http:' + image)
-        if image[0] == 'h':
+        elif image[0] == 'h':
             res = urllib.request.urlretrieve(image)
         else:
             parsed_uri = urlparse(url)
             result = '{uri.scheme}://{uri.netloc}'.format(uri=parsed_uri)
             res = urllib.request.urlretrieve(result + image)
-        WebImage.save()
     return {'status': 'success'}
 
 @shared_task
-def download_text(url):
+def download_text(url, download):
     webpage = str(urllib.request.urlopen(url).read().decode('utf-8'))
     soup = BeautifulSoup(webpage, features="lxml")
 
@@ -48,7 +47,10 @@ def download_text(url):
     chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
     # drop blank lines
     text = '\n'.join(chunk for chunk in chunks if chunk)
-    print(text)
+
+    download = Download.objects.get(pk=download.pk)
+    webtext = WebText.objects.create(data=text, download=download)
+    webtext.save()
     return text
 
 #download_images(url)
