@@ -12,7 +12,7 @@ class WebImageSerializer(serializers.ModelSerializer):
         fields = ('id','data','download')
 
     def get_data(self, obj):
-        f = open(obj.image_file.path, 'rb')
+        f = open(obj.data.path, 'rb')
         image = File(f)
         data = base64.b64encode(image.read())
         f.close()
