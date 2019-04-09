@@ -2,10 +2,12 @@
 
 ## How to run
 
+```bash
 git clone https://github.com/MateuszKuba/DownloadAPI
 cd DownloadAPI
 docker-compose build
 docker-compose up
+```
 
 ## Endpoints
 
