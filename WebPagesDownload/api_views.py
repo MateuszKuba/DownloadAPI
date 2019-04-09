@@ -7,11 +7,22 @@ from WebPagesDownload.tasks import download_text, download_images
 from django.http import Http404
 from django_celery_results.models import TaskResult
 logger = logging.getLogger(__name__)
-from django.db import transaction
+
 
 class DownloadViewSet(viewsets.ModelViewSet):
     queryset = models.Download.objects.all()
     serializer_class = serializers.DownloadSerializer
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned purchases to a given user,
+        by filtering against a `username` query parameter in the URL.
+        """
+        queryset = models.Download.objects.all()
+        url = self.request.query_params.get('url', None)
+        if url is not None:
+            queryset = queryset.filter(download__url=url)
+        return queryset
 
     def create(self,  request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
