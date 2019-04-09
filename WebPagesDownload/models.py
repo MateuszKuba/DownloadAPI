@@ -2,11 +2,11 @@ from django.db import models
 
 
 def image_path(instance, filename):
-    return '/'.join(['images', instance.user.username, filename])
+    return '/'.join(['images', filename])
 
 
 def text_path(instance, filename):
-    return '/'.join(['texts', instance.user.username, filename])
+    return '/'.join(['texts', filename])
 
 
 PENDING = 0
