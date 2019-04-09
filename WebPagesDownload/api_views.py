@@ -26,10 +26,10 @@ class DownloadViewSet(viewsets.ModelViewSet):
 
         url = request.data['url']
 
-        download = self.perform_create(serializer)
-        print(download)
-        text_task_id = download_text.delay(url, download)
-        image_task_id = download_images.delay(url, download)
+        self.perform_create(serializer)
+
+        text_task_id = download_text.delay(url)
+        image_task_id = download_images.delay(url)
 
         # print(type(text_task_id))
         #
