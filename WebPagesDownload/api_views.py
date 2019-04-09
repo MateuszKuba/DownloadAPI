@@ -13,13 +13,6 @@ class DownloadViewSet(viewsets.ModelViewSet):
     queryset = models.Download.objects.all()
     serializer_class = serializers.DownloadSerializer
 
-    def get_queryset(self):
-        query_set = self.queryset
-        url = self.request.query_params.get('url',None)
-        if url is not None:
-            query_set = query_set.filter(download__url=url)
-        return query_set
-
     def create(self,  request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
