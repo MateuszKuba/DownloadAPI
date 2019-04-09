@@ -2,14 +2,12 @@ from django.db import models
 
 
 def image_path(instance, filename):
-    return 'images/{}'.format(
-        filename
-    )
+    return 'images/'
+
 
 def text_path(instance, filename):
-    return 'texts/{}'.format(
-        filename
-    )
+    return 'texts/'
+
 
 PENDING = 0
 DONE = 1
