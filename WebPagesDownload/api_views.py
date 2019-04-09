@@ -21,7 +21,7 @@ class DownloadViewSet(viewsets.ModelViewSet):
         queryset = models.Download.objects.all()
         url = self.request.query_params.get('url', None)
         if url is not None:
-            queryset = queryset.filter(download__url=url)
+            queryset = queryset.filter(url=url)
         return queryset
 
     def create(self,  request, *args, **kwargs):
