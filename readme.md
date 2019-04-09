@@ -22,3 +22,13 @@ to find a serialized method to change the default method for files retrieval. So
 I have applied also additional filter to be able to use enddpoint like /api/v1/download/?url=http://www.onet.pl to search for images specified by url field. The same is done for /images endpoint and /text endpoint.
 Docker-compose file were created for easy reproducibility.
 
+
+## What could be updated
+
+Tests for all endpoints. Tests for models creations. Tests for tasks. All endpoints allow for post,get,put,delete but maybe some of them should be read only. Serialization is not checked inside celery tasks so it could be also improved. Storage could be also changed for external like S3 drive. CD solution could be provided like .gitlab-ci or .travis-ci.
+Solution could be implemented also using amazon API gateway, SQS and lambda with terraform file for infrastructure creation if cloud solution was needed. Lambda files are good enough for files transformation or text retrieval from webpages and scale infinitely.
+
+
+## API
+
+Check IP address for online solution http://34.245.183.237:8000/api/v1/
