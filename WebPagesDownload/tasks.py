@@ -6,6 +6,7 @@ import urllib
 from urllib.parse import urlparse
 from .models import WebImage, Download, WebText
 from django.core.files import File
+from django.core.files.base import ContentFile
 
 url = 'https://www.onet.pl'
 
@@ -33,7 +34,8 @@ def download_images(url):
             res = urllib.request.urlretrieve(result + image)
         download = Download.objects.get(url=url)
         print(res)
-        webimage = WebImage.objects.create(data=File(open(res[0], 'rb')), download=download)
+        webimage = WebImage.objects.create(download=download)
+        webimage.data.save(File(open(res[0], 'rb')))
         webimage.save()
 
     return {'status': 'success'}
@@ -55,7 +57,8 @@ def download_text(url):
     text = '\n'.join(chunk for chunk in chunks if chunk)
 
     download = Download.objects.get(url=url)
-    webtext = WebText.objects.create(data=text, download=download)
+    webtext = WebText.objects.create(download=download)
+    webtext.data.save('test.txt', ContentFile(text))
     webtext.save()
 
     return text
