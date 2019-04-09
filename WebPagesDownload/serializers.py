@@ -35,8 +35,8 @@ class WebTextSerializer(serializers.ModelSerializer):
 
 
 class DownloadSerializer(serializers.ModelSerializer):
-    webimage = serializers.HyperlinkedRelatedField(many=True, read_only=True)
-    webtext = serializers.HyperlinkedRelatedField(many=True,  read_only=True)
+    webimage = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='webtext-detail')
+    webtext = serializers.HyperlinkedRelatedField(many=True,  read_only=True, view_name='webtext-detail')
 
     class Meta:
         model = Download
