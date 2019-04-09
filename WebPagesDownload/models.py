@@ -3,12 +3,12 @@ from django.db import models
 
 def image_path(instance, filename):
     return 'images/{}'.format(
-        instance.id
+        filename
     )
 
 def text_path(instance, filename):
     return 'texts/{}'.format(
-        instance.id
+        filename
     )
 
 PENDING = 0

@@ -6,6 +6,7 @@ import urllib
 from urllib.parse import urlparse
 from .models import WebImage, Download, WebText
 from django.core.files import File
+from django.core.files.base import ContentFile
 
 url = 'https://www.onet.pl'
 
@@ -19,7 +20,7 @@ def images_urls(url):
     return img
 
 @shared_task
-def download_images(url, download):
+def download_images(url):
     urls = images_urls(url)
     res = None
     for image in urls:
@@ -31,14 +32,16 @@ def download_images(url, download):
             parsed_uri = urlparse(url)
             result = '{uri.scheme}://{uri.netloc}'.format(uri=parsed_uri)
             res = urllib.request.urlretrieve(result + image)
-    download = Download.objects.get(pk=download.pk)
-    webimage = WebImage.objects.create(data=File(open(res[0])), download=download)
-    webimage.save()
+        download = Download.objects.get(url=url)
+        print(res)
+        webimage = WebImage.objects.create(download=download)
+        webimage.data.save(image.split("/")[-1],File(open(res[0], 'rb')))
+        webimage.save()
 
     return {'status': 'success'}
 
 @shared_task
-def download_text(url, download):
+def download_text(url):
     webpage = str(urllib.request.urlopen(url).read().decode('utf-8'))
     soup = BeautifulSoup(webpage, features="lxml")
 
@@ -53,8 +56,9 @@ def download_text(url, download):
     # drop blank lines
     text = '\n'.join(chunk for chunk in chunks if chunk)
 
-    download = Download.objects.get(pk=download.pk)
-    webtext = WebText.objects.create(data=text, download=download)
+    download = Download.objects.get(url=url)
+    webtext = WebText.objects.create(download=download)
+    webtext.data.save(url.split('/')[-1], ContentFile(text))
     webtext.save()
 
     return text

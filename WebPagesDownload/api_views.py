@@ -25,10 +25,11 @@ class DownloadViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         url = request.data['url']
-        with transaction.atomic():
-            download = self.perform_create(serializer)
-        text_task_id = download_text.delay(url, download)
-        image_task_id = download_images.delay(url, download)
+
+        self.perform_create(serializer)
+
+        text_task_id = download_text.delay(url)
+        image_task_id = download_images.delay(url)
 
         # print(type(text_task_id))
         #
