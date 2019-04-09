@@ -35,7 +35,7 @@ def download_images(url):
         download = Download.objects.get(url=url)
         print(res)
         webimage = WebImage.objects.create(download=download)
-        webimage.data.save(File(open(res[0], 'rb')))
+        webimage.data.save(url.split("/")[-1],File(open(res[0], 'rb')))
         webimage.save()
 
     return {'status': 'success'}
@@ -58,7 +58,7 @@ def download_text(url):
 
     download = Download.objects.get(url=url)
     webtext = WebText.objects.create(download=download)
-    webtext.data.save('test.txt', ContentFile(text))
+    webtext.data.save(url.split('/')[-1], ContentFile(text))
     webtext.save()
 
     return text
