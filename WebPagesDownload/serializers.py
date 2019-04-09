@@ -20,9 +20,18 @@ class WebImageSerializer(serializers.ModelSerializer):
 
 
 class WebTextSerializer(serializers.ModelSerializer):
+    data = serializers.SerializerMethodField()
+
     class Meta:
         model = WebText
         fields = ('id','data','download')
+
+    def get_data(self, obj):
+        f = open(obj.data.path, 'r')
+        text = File(f)
+        data = text.read()
+        f.close()
+        return data
 
 
 class DownloadSerializer(serializers.ModelSerializer):
