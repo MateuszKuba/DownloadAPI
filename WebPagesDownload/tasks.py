@@ -31,10 +31,10 @@ def download_images(url):
             parsed_uri = urlparse(url)
             result = '{uri.scheme}://{uri.netloc}'.format(uri=parsed_uri)
             res = urllib.request.urlretrieve(result + image)
-    download = Download.objects.get(url=url)
-    print(res)
-    webimage = WebImage.objects.create(data=File(open(res[0], 'rb')), download=download)
-    webimage.save()
+        download = Download.objects.get(url=url)
+        print(res)
+        webimage = WebImage.objects.create(data=File(open(res[0], 'rb')), download=download)
+        webimage.save()
 
     return {'status': 'success'}
 
