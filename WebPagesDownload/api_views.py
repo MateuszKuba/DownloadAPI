@@ -16,7 +16,7 @@ class DownloadViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """
         Optionally restricts the returned purchases to a given user,
-        by filtering against a `username` query parameter in the URL.
+        by filtering against a `url` query parameter in the URL.
         """
         queryset = models.Download.objects.all()
         url = self.request.query_params.get('url', None)
@@ -25,6 +25,10 @@ class DownloadViewSet(viewsets.ModelViewSet):
         return queryset
 
     def create(self,  request, *args, **kwargs):
+        '''
+        POST method equivalent for creation of resources. Creates empty Download resource and delegates text
+        downloading and image downloading to celery broker
+        '''
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -64,6 +68,10 @@ class TextsViewSet(viewsets.ModelViewSet):
 
 
 class StatusDetail(APIView):
+    '''
+    View for checking archived celery results. They are stored inside TaskResult model that is created by
+    django-celery-results plugin
+    '''
     def get(self,request, pk):
         try:
             detail =  TaskResult.objects.get_task(task_id=pk)
