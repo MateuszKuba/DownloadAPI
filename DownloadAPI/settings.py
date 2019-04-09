@@ -25,7 +25,7 @@ SECRET_KEY = 'x8zw2y#jka6osgagtz=$n5$stny=e)+ste)o4-cx0e62vk+y+h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['34.245.183.237']
 
 CELERY_BROKER_URL = 'redis://redis:6379'
 CELERY_RESULT_BACKEND = 'redis://redis:6379'
