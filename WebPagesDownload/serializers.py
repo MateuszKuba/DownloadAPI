@@ -2,13 +2,13 @@ from WebPagesDownload.models import Download, WebImage, WebText
 from rest_framework import serializers
 
 
-class WebImageSerializer(serializers.HyperlinkedModelSerializer):
+class WebImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebImage
         fields = ('id','data','download')
 
 
-class WebTextSerializer(serializers.HyperlinkedModelSerializer):
+class WebTextSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebText
         fields = ('id','data','download')
