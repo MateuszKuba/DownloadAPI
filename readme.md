@@ -1,5 +1,12 @@
 ## Download API V1
 
+## How to run
+
+git clone https://github.com/MateuszKuba/DownloadAPI
+cd DownloadAPI
+docker-compose build
+docker-compose up
+
 ## Endpoints
 
 * /api/v1
