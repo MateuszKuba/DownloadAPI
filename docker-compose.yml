@@ -14,7 +14,8 @@ services:
       - redis
   celery:
     build: .
-    command: celery -A proj worker -l info
+    command: celery -A DownloadAPI worker -l info
+
     volumes:
       - .:/code
     depends_on:
