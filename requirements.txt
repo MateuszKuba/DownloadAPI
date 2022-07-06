@@ -10,7 +10,7 @@ djangorestframework==3.9.2
 future==0.17.1
 idna==2.8
 kombu==4.5.0
-lxml==4.3.3
+lxml==4.9.1
 Pillow==6.0.0
 pytz==2018.9
 requests==2.21.0
